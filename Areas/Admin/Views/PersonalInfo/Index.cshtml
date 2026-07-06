@@ -1,0 +1,72 @@
+@model MyWebPage.Models.PersonalInfo
+@{
+    ViewData["Title"] = "Kişisel Bilgiler";
+}
+<div class="container mt-4">
+    <h2>Kişisel Bilgiler</h2>
+    
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+    }
+
+    <div class="card shadow-sm p-4 mt-3">
+        <form asp-action="Index" method="post" enctype="multipart/form-data">
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="CvUrl" />
+            
+            <div class="mb-3">
+                <label asp-for="FullName" class="form-label">Ad Soyad</label>
+                <input asp-for="FullName" class="form-control" />
+                <span asp-validation-for="FullName" class="text-danger"></span>
+            </div>
+            
+            <div class="mb-3">
+                <label asp-for="Title" class="form-label">Unvan</label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            
+            <div class="mb-3">
+                <label asp-for="AboutMe" class="form-label">Hakkımda</label>
+                <textarea asp-for="AboutMe" class="form-control" rows="5"></textarea>
+                <span asp-validation-for="AboutMe" class="text-danger"></span>
+            </div>
+            
+            <div class="mb-3">
+                <label asp-for="ContactEmail" class="form-label">Email</label>
+                <input asp-for="ContactEmail" class="form-control" type="email" />
+                <span asp-validation-for="ContactEmail" class="text-danger"></span>
+            </div>
+            
+            <div class="mb-3">
+                <label asp-for="LinkedInUrl" class="form-label">LinkedIn Profil Linki</label>
+                <input asp-for="LinkedInUrl" class="form-control" />
+                <span asp-validation-for="LinkedInUrl" class="text-danger"></span>
+            </div>
+            
+            <div class="mb-3">
+                <label asp-for="GitHubUrl" class="form-label">GitHub Profil Linki</label>
+                <input asp-for="GitHubUrl" class="form-control" />
+                <span asp-validation-for="GitHubUrl" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3 border p-3 rounded">
+                <label class="form-label fw-bold">Özgeçmiş (CV) Dosyası (Sadece PDF)</label>
+                <input type="file" name="cvFile" class="form-control" accept=".pdf" />
+                @if (!string.IsNullOrEmpty(Model.CvUrl))
+                {
+                    <div class="mt-2">
+                        Mevcut CV: <a href="@Model.CvUrl" target="_blank" class="text-primary">Görüntüle</a>
+                    </div>
+                }
+            </div>
+            
+            <button type="submit" class="btn btn-primary w-100">Kaydet</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

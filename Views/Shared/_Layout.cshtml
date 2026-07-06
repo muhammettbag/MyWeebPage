@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="tr" data-theme="dark">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Showcase</title>
+    
+    <!-- Modern Font: Inter & Fira Code -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    
+    <!-- Devicon for Technology Logos -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+    
+    <!-- AOS Animation -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/MyWebPage.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <!-- Particle Background Container -->
+    <div id="particles-js"></div>
+
+    <header>
+        <nav class="navbar custom-navbar" id="navbar">
+            <div class="nav-container container">
+                <div class="d-flex align-items-center">
+                    @if (!string.IsNullOrEmpty(ViewBag.CvUrl as string))
+                    {
+                        <div class="cv-btn-wrapper">
+                            <a href="@ViewBag.CvUrl" target="_blank" class="cv-btn-inner">
+                                <i class="fas fa-file-pdf"></i> CV'mi Görüntüle
+                            </a>
+                        </div>
+                    }
+                    else
+                    {
+                        <a class="nav-logo" href="#">
+                            <span class="logo-text"></span>
+                        </a>
+                    }
+                </div>
+                
+                <ul class="nav-menu" id="nav-menu">
+                    <li><a href="#hakkimda" class="nav-link">Hakkımda</a></li>
+                    <li><a href="#deneyim" class="nav-link">İş Deneyimi</a></li>
+                    <li><a href="#yetenekler" class="nav-link">Kullandığım Teknolojiler</a></li>
+                    <li><a href="#projeler" class="nav-link">Projeler</a></li>
+                    <li><a href="#iletisim" class="nav-link">İletişim</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    
+    <div class="main-content-wrapper">
+        <main role="main">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="text-center py-4 mt-5">
+        <div class="container">
+            <p class="text-muted mb-0" style="font-family: var(--font-mono); font-size: 13px;">
+                &copy; 2026 Muhammet Bağ. Tüm Hakları Saklıdır.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- AOS, Typed, Particles -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.1.0/typed.umd.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+    
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

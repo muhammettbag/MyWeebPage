@@ -1,0 +1,25 @@
+@{
+    ViewData["Title"] = "Dashboard";
+}
+<h2>Hoşgeldiniz</h2>
+<p>Sol menüden içerik yönetimine başlayabilirsiniz.</p>
+<div class="row mt-4">
+    <div class="col-md-4">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <h5 class="card-title">Kişisel Bilgiler</h5>
+                <p class="card-text">Adınızı, ünvanınızı ve sosyal medya hesaplarınızı güncelleyin.</p>
+                <a asp-controller="PersonalInfo" asp-action="Index" class="btn btn-light btn-sm">Yönet</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <h5 class="card-title">Projeler</h5>
+                <p class="card-text">Portfolyonuzda sergilenecek projeleri ekleyin veya düzenleyin.</p>
+                <a asp-controller="Project" asp-action="Index" class="btn btn-light btn-sm">Yönet</a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,69 @@
+@model MyWebPage.Models.Experience
+@{
+    ViewData["Title"] = "İş Deneyimi Düzenle";
+}
+
+<div class="card bg-dark text-light mt-4">
+    <div class="card-header">
+        <h4>İş Deneyimi Düzenle</h4>
+    </div>
+    <div class="card-body">
+        <form asp-action="Edit" method="post">
+            <input type="hidden" asp-for="Id" />
+            <div class="mb-3">
+                <label asp-for="Position" class="form-label">Pozisyon (Örn: Senior Developer)</label>
+                <input asp-for="Position" class="form-control bg-secondary text-light border-0" required />
+                <span asp-validation-for="Position" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Company" class="form-label">Şirket Adı</label>
+                <input asp-for="Company" class="form-control bg-secondary text-light border-0" required />
+                <span asp-validation-for="Company" class="text-danger"></span>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="StartDate" class="form-label">Başlangıç Tarihi (Örn: 2020 veya Oca 2020)</label>
+                    <input asp-for="StartDate" class="form-control bg-secondary text-light border-0" required />
+                    <span asp-validation-for="StartDate" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="EndDate" class="form-label">Bitiş Tarihi</label>
+                    <input asp-for="EndDate" class="form-control bg-secondary text-light border-0" id="endDateInput" />
+                    <span asp-validation-for="EndDate" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="mb-3 form-check">
+                <input asp-for="IsCurrent" class="form-check-input" id="isCurrentCheck" />
+                <label asp-for="IsCurrent" class="form-check-label">Hala bu işte çalışıyorum (Devam Ediyor)</label>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label">Açıklama (Yapılan işler, projeler vs.)</label>
+                <textarea asp-for="Description" class="form-control bg-secondary text-light border-0" rows="5" required></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Güncelle</button>
+            <a asp-action="Index" class="btn btn-secondary">Vazgeç</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var check = document.getElementById('isCurrentCheck');
+            var endDateInput = document.getElementById('endDateInput');
+            if(check.checked) {
+                endDateInput.disabled = true;
+            }
+            
+            check.addEventListener('change', function() {
+                if(this.checked) {
+                    endDateInput.value = '';
+                    endDateInput.disabled = true;
+                } else {
+                    endDateInput.disabled = false;
+                }
+            });
+        });
+    </script>
+}

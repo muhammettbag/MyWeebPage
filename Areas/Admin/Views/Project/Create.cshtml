@@ -1,0 +1,38 @@
+@model MyWebPage.Models.Project
+@{
+    ViewData["Title"] = "Yeni Proje Ekle";
+}
+<h2>Yeni Proje Ekle</h2>
+<hr />
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label asp-for="Title" class="form-label">Proje Başlığı</label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Summary" class="form-label">Özet</label>
+        <textarea asp-for="Summary" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="Summary" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Technologies" class="form-label">Teknolojiler (Virgül ile ayırın)</label>
+        <input asp-for="Technologies" class="form-control" placeholder="C#, ASP.NET, React..." />
+        <span asp-validation-for="Technologies" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="ImageFile" class="form-label">Bilgisayardan Resim Yükle</label>
+        <input asp-for="ImageFile" type="file" class="form-control" accept="image/*" />
+        <small class="text-muted">Veya bilgisayardan yüklemek yerine aşağıya bir resim linki yapıştırabilirsiniz.</small>
+    </div>
+    <div class="mb-3">
+        <label asp-for="ImageUrl" class="form-label">Resim URL (Dış Bağlantı)</label>
+        <input asp-for="ImageUrl" class="form-control" placeholder="https://..." />
+    </div>
+    <div class="mb-3">
+        <label asp-for="LiveLink" class="form-label">Canlı Link</label>
+        <input asp-for="LiveLink" class="form-control" placeholder="https://..." />
+    </div>
+    <button type="submit" class="btn btn-success">Kaydet</button>
+    <a asp-action="Index" class="btn btn-secondary">İptal</a>
+</form>

@@ -1,0 +1,190 @@
+@model MyWebPage.Models.HomeViewModel
+@{
+    ViewData["Title"] = "Ana Sayfa";
+    var pInfo = Model.PersonalInfo;
+    ViewBag.CvUrl = pInfo?.CvUrl;
+}
+
+<!-- Hero Section -->
+<section id="hakkimda" class="hero">
+    <div class="hero-content container">
+        <div class="hero-text" data-aos="fade-up">
+            <p class="hero-greeting">Merhaba, ben</p>
+            <h1 class="hero-name">
+                <span class="name-highlight">@Model.PersonalInfo?.FullName</span>
+            </h1>
+            
+            <div class="hero-role">
+                <div class="role-typing-wrapper">
+                    <span id="typed-output" class="typed-text" data-title="@Model.PersonalInfo?.Title"></span>
+                </div>
+            </div>
+            
+            <p class="hero-description mt-3">
+                @Model.PersonalInfo?.AboutMe
+            </p>
+            
+            <div class="hero-buttons mt-4">
+                <a href="#iletisim" class="btn btn-primary custom-btn">
+                    <i class="fas fa-paper-plane"></i> İletişime Geç
+                </a>
+                <a href="#projeler" class="btn btn-secondary custom-btn-outline">
+                    <i class="fas fa-briefcase"></i> Projelerim
+                </a>
+            </div>
+        </div>
+        
+        <div class="hero-image" data-aos="fade-left" data-aos-delay="200">
+            <div class="image-container">
+                <div class="image-glow"></div>
+                <!-- Default avatar (if any), currently just a styled box -->
+                <div class="profile-placeholder">
+                    <i class="fas fa-user-astronaut fa-5x text-white"></i>
+                </div>
+                <div class="floating-badge badge-1"><i class="fab fa-react"></i></div>
+                <div class="floating-badge badge-2"><i class="devicon-dotnetcore-plain"></i></div>
+                <div class="floating-badge badge-3"><i class="devicon-docker-plain"></i></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="scroll-indicator">
+        <a href="#deneyim">
+            <div class="mouse">
+                <div class="wheel"></div>
+            </div>
+            <span>Aşağı Kaydır</span>
+        </a>
+    </div>
+</section>
+
+<!-- Experience Section -->
+<section id="deneyim" class="section bg-alternate">
+    <div class="container">
+        <h2 class="section-title" data-aos="fade-up">
+            <i class="fas fa-hashtag title-icon"></i> İş Deneyimi
+        </h2>
+        
+        <div class="timeline mt-5">
+            @if (Model.Experiences.Any())
+            {
+                foreach (var exp in Model.Experiences)
+                {
+                    <div class="timeline-item" data-aos="fade-up">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h3 class="timeline-title">@exp.Position <span>@@ @exp.Company</span></h3>
+                            <p class="timeline-date">@exp.StartDate - @(exp.IsCurrent ? "Devam Ediyor" : exp.EndDate)</p>
+                            <p class="timeline-desc text-muted mt-3">@exp.Description</p>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="timeline-item" data-aos="fade-up">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <p class="text-muted">Henüz iş deneyimi eklenmemiş.</p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- Skills Section -->
+<section id="yetenekler" class="section">
+    <div class="container">
+        <h2 class="section-title text-center" data-aos="fade-up">
+            <i class="fas fa-hashtag title-icon"></i> Kullandığım Teknolojiler
+        </h2>
+        <div class="tech-grid mt-5" data-aos="fade-up" data-aos-delay="100">
+            <div class="tech-box"><i class="devicon-dot-net-plain colored"></i><span>.NET</span></div>
+            <div class="tech-box"><i class="devicon-csharp-plain colored"></i><span>C#</span></div>
+            <div class="tech-box"><i class="devicon-dotnetcore-plain colored"></i><span>ASP.NET Core</span></div>
+            <div class="tech-box"><i class="devicon-react-original colored"></i><span>React</span></div>
+            <div class="tech-box"><i class="devicon-javascript-plain colored"></i><span>JavaScript</span></div>
+            <div class="tech-box"><i class="devicon-microsoftsqlserver-plain colored"></i><span>SQL Server</span></div>
+            <div class="tech-box"><i class="devicon-postgresql-plain colored"></i><span>PostgreSQL</span></div>
+            <div class="tech-box"><i class="devicon-docker-plain colored"></i><span>Docker</span></div>
+            <div class="tech-box"><i class="devicon-git-plain colored"></i><span>Git</span></div>
+            <div class="tech-box"><i class="devicon-linux-plain"></i><span>Linux</span></div>
+            <div class="tech-box"><i class="devicon-flutter-plain colored"></i><span>Flutter</span></div>
+        </div>
+    </div>
+</section>
+
+<!-- Projects Section -->
+<section id="projeler" class="section bg-alternate projects-section">
+    <div class="container">
+        <h2 class="section-title text-center" data-aos="fade-up">
+            <i class="fas fa-hashtag title-icon"></i> Projelerim
+        </h2>
+        
+        <div class="row g-4 mt-5">
+            @foreach (var p in Model.Projects)
+            {
+                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="project-card h-100">
+                        @if (!string.IsNullOrEmpty(p.ImageUrl))
+                        {
+                            <div class="project-img-wrapper">
+                                <img src="@p.ImageUrl" alt="@p.Title" class="project-img" />
+                            </div>
+                        }
+                        <div class="project-info p-4">
+                            <h3 class="project-title">@p.Title</h3>
+                            <p class="project-summary text-muted mt-3 mb-4">@p.Summary</p>
+                            <div class="project-tech mb-4">
+                                @foreach (var tech in p.Technologies.Split(',', StringSplitOptions.RemoveEmptyEntries))
+                                {
+                                    <span class="tech-tag">@tech.Trim()</span>
+                                }
+                            </div>
+                            @if (!string.IsNullOrEmpty(p.LiveLink))
+                            {
+                                <a href="@p.LiveLink" target="_blank" class="btn btn-outline-primary w-100 mt-auto project-btn">
+                                    <i class="fas fa-external-link-alt"></i> Projeyi İncele
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section id="iletisim" class="section contact-section text-center">
+    <div class="container">
+        <h2 class="section-title" data-aos="fade-up">
+            <i class="fas fa-hashtag title-icon"></i> İletişim Bilgilerim
+        </h2>
+        
+        <div class="contact-card mt-5 p-5 mx-auto" data-aos="zoom-in">
+            <p class="text-muted mb-5 fs-5">Benimle projeleriniz hakkında konuşmak veya iletişime geçmek isterseniz sosyal medya hesaplarımdan ulaşabilirsiniz.</p>
+            <div class="social-links d-flex justify-content-center gap-4 flex-wrap">
+                @if (!string.IsNullOrEmpty(Model.PersonalInfo?.GitHubUrl))
+                {
+                    <a href="@Model.PersonalInfo.GitHubUrl" target="_blank" class="social-btn github">
+                        <i class="fab fa-github fa-2x mb-2"></i> <br/>GitHub
+                    </a>
+                }
+                @if (!string.IsNullOrEmpty(Model.PersonalInfo?.LinkedInUrl))
+                {
+                    <a href="@Model.PersonalInfo.LinkedInUrl" target="_blank" class="social-btn linkedin">
+                        <i class="fab fa-linkedin fa-2x mb-2"></i> <br/>LinkedIn
+                    </a>
+                }
+                @if (!string.IsNullOrEmpty(Model.PersonalInfo?.ContactEmail))
+                {
+                    <a href="mailto:@Model.PersonalInfo.ContactEmail" class="social-btn email">
+                        <i class="fas fa-envelope fa-2x mb-2"></i> <br/>E-Posta
+                    </a>
+                }
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel - MyWebPage</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        body { background-color: #f8f9fa; }
+        .sidebar { min-height: 100vh; background: #343a40; color: #fff; }
+        .sidebar a { color: #adb5bd; text-decoration: none; padding: 10px 20px; display: block; }
+        .sidebar a:hover { color: #fff; background: #495057; }
+        .main-content { padding: 20px; }
+    </style>
+</head>
+<body>
+    <div class="d-flex">
+        <div class="sidebar w-25">
+            <h4 class="p-3 border-bottom border-secondary text-center">Admin Panel</h4>
+            <ul class="nav flex-column">
+                <li class="nav-item mb-2">
+                    <a class="nav-link text-light bg-secondary rounded" asp-area="Admin" asp-controller="Home" asp-action="Index">
+                        <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link text-light bg-secondary rounded" asp-area="Admin" asp-controller="PersonalInfo" asp-action="Index">
+                        <i class="fas fa-user me-2"></i> Hakkımda
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link text-light bg-secondary rounded" asp-area="Admin" asp-controller="Experience" asp-action="Index">
+                        <i class="fas fa-briefcase me-2"></i> İş Deneyimi
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link text-light bg-secondary rounded" asp-area="Admin" asp-controller="Project" asp-action="Index">
+                        <i class="fas fa-project-diagram me-2"></i> Projeler
+                    </a>
+                </li>
+            </ul>
+            <ul class="list-unstyled">
+                <li class="mt-5 border-top border-secondary"><a asp-area="" asp-controller="Home" asp-action="Index"><i class="fas fa-globe"></i> Siteye Dön</a></li>
+                <li><a asp-area="Admin" asp-controller="Account" asp-action="Logout" class="text-danger"><i class="fas fa-sign-out-alt"></i> Çıkış Yap</a></li>
+            </ul>
+        </div>
+        <div class="main-content w-100">
+            @RenderBody()
+        </div>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
