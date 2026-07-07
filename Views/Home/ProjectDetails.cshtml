@@ -1,0 +1,117 @@
+@model MyWebPage.Models.Project
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="project-details-container">
+    <div class="container py-5 mt-5">
+        
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="project-details-title">@Model.Title</h1>
+            <a asp-action="Index" class="btn btn-outline-light custom-btn-outline">
+                <i class="fas fa-arrow-left"></i> Ana Sayfaya Dön
+            </a>
+        </div>
+
+        <div class="row">
+            <div class="col-12 mb-5">
+                <!-- Carousel -->
+                <div id="projectCarousel" class="carousel slide carousel-fade shadow-lg rounded overflow-hidden" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        @if (Model.ProjectImages != null && Model.ProjectImages.Any())
+                        {
+                            var isFirst = true;
+                            foreach (var img in Model.ProjectImages)
+                            {
+                                <div class="carousel-item @(isFirst ? "active" : "")">
+                                    <img src="@img.ImageUrl" class="d-block w-100 carousel-img" alt="@Model.Title">
+                                </div>
+                                isFirst = false;
+                            }
+                        }
+                        else if (!string.IsNullOrEmpty(Model.ImageUrl))
+                        {
+                            <div class="carousel-item active">
+                                <img src="@Model.ImageUrl" class="d-block w-100 carousel-img" alt="@Model.Title">
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="carousel-item active">
+                                <div class="d-flex justify-content-center align-items-center bg-secondary carousel-img">
+                                    <span class="text-white">Görsel Yok</span>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    
+                    @if ((Model.ProjectImages != null && Model.ProjectImages.Count > 1))
+                    {
+                        <button class="carousel-control-prev" type="button" data-bs-target="#projectCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Önceki</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#projectCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Sonraki</span>
+                        </button>
+                    }
+                </div>
+            </div>
+            
+            <div class="col-12 col-md-10 mx-auto text-center mb-5">
+                <h3 class="mb-4 text-accent"><i class="fas fa-align-left"></i> Proje Açıklaması</h3>
+                <p class="fs-5 text-light" style="white-space: pre-line; text-align: left; line-height: 1.8;">
+                    @Model.Summary
+                </p>
+                
+                <hr class="border-secondary my-5" />
+
+                <h4 class="text-accent mb-4"><i class="fas fa-code"></i> Kullanılan Teknolojiler</h4>
+                <div class="project-tech d-flex justify-content-center flex-wrap gap-2 mb-5">
+                    @if (!string.IsNullOrEmpty(Model.Technologies))
+                    {
+                        foreach (var tech in Model.Technologies.Split(',', StringSplitOptions.RemoveEmptyEntries))
+                        {
+                            <span class="tech-tag fs-6 py-2 px-3" style="margin: 0;">@tech.Trim()</span>
+                        }
+                    }
+                </div>
+                
+                @if (!string.IsNullOrEmpty(Model.LiveLink))
+                {
+                    <div class="mt-4">
+                        <a href="@Model.LiveLink" target="_blank" class="btn btn-outline-primary custom-btn-outline fs-5 px-4 py-2">
+                            <i class="fas fa-external-link-alt"></i> Projeyi Canlıda İncele
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .project-details-container {
+        min-height: 100vh;
+        background-color: var(--bg-color);
+        padding-bottom: 50px;
+    }
+    .project-details-title {
+        color: var(--text-main);
+        font-weight: 800;
+        font-size: 2.5rem;
+    }
+    .text-accent {
+        color: var(--accent);
+    }
+    .text-light {
+        color: #ccd6f6 !important;
+    }
+    .carousel-img {
+        height: 600px;
+        object-fit: contain;
+        background-color: #020c1b;
+        border-radius: 8px;
+    }
+</style>

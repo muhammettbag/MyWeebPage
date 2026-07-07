@@ -20,7 +20,14 @@ namespace MyWebPage.Models
         
         public string? ImageUrl { get; set; }
 
+        // Added for multiple images
+        public List<ProjectImage> ProjectImages { get; set; } = new List<ProjectImage>();
+
         [System.ComponentModel.DataAnnotations.Schema.NotMapped]
         public Microsoft.AspNetCore.Http.IFormFile? ImageFile { get; set; }
+
+        // Added for multiple image uploads in Admin panel
+        [System.ComponentModel.DataAnnotations.Schema.NotMapped]
+        public List<Microsoft.AspNetCore.Http.IFormFile>? ImageFiles { get; set; }
     }
 }

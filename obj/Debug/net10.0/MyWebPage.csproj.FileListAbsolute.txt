@@ -221,5 +221,5 @@ C:\.NET\MyWebPage\obj\Debug\net10.0\MyWebPage.pdb
 C:\.NET\MyWebPage\obj\Debug\net10.0\MyWebPage.genruntimeconfig.cache
 C:\.NET\MyWebPage\obj\Debug\net10.0\ref\MyWebPage.dll
 C:\.NET\MyWebPage\obj\Debug\net10.0\compressed\itlp0s13g2-{0}-9rqn6m51co-9rqn6m51co.gz
-C:\.NET\MyWebPage\obj\Debug\net10.0\compressed\oc7g9kse5b-{0}-ccoxp70396-ccoxp70396.gz
 C:\.NET\MyWebPage\obj\Debug\net10.0\MyWebPage.sourcelink.json
+C:\.NET\MyWebPage\obj\Debug\net10.0\compressed\oc7g9kse5b-{0}-650jn0wth7-650jn0wth7.gz

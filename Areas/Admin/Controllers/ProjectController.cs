@@ -40,21 +40,50 @@ namespace MyWebPage.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (project.ImageFile != null)
+                if (project.ImageFiles != null && project.ImageFiles.Count > 0)
                 {
                     string wwwRootPath = _hostEnvironment.WebRootPath;
-                    string fileName = Path.GetFileNameWithoutExtension(project.ImageFile.FileName);
+                    string uploadsFolder = Path.Combine(wwwRootPath, "uploads", "projects");
+                    Directory.CreateDirectory(uploadsFolder);
+                    
+                    foreach (var file in project.ImageFiles)
+                    {
+                        string extension = Path.GetExtension(file.FileName);
+                        string fileName = Guid.NewGuid().ToString() + extension;
+                        string path = Path.Combine(uploadsFolder, fileName);
+                        
+                        using (var fileStream = new FileStream(path, FileMode.Create))
+                        {
+                            await file.CopyToAsync(fileStream);
+                        }
+                        
+                        project.ProjectImages.Add(new ProjectImage { ImageUrl = "/uploads/projects/" + fileName });
+                    }
+                    
+                    if (project.ProjectImages.Count > 0)
+                    {
+                        project.ImageUrl = project.ProjectImages.First().ImageUrl;
+                    }
+                }
+                // Fallback for single image upload if used
+                else if (project.ImageFile != null)
+                {
+                    string wwwRootPath = _hostEnvironment.WebRootPath;
                     string extension = Path.GetExtension(project.ImageFile.FileName);
-                    project.ImageUrl = "/uploads/projects/" + fileName + DateTime.Now.ToString("yymmssfff") + extension;
+                    string fileName = Guid.NewGuid().ToString() + extension;
                     
-                    string path = Path.Combine(wwwRootPath + "/uploads/projects/", fileName + DateTime.Now.ToString("yymmssfff") + extension);
+                    project.ImageUrl = "/uploads/projects/" + fileName;
                     
-                    Directory.CreateDirectory(Path.Combine(wwwRootPath, "uploads", "projects"));
+                    string uploadsFolder = Path.Combine(wwwRootPath, "uploads", "projects");
+                    Directory.CreateDirectory(uploadsFolder);
+                    
+                    string path = Path.Combine(uploadsFolder, fileName);
                     
                     using (var fileStream = new FileStream(path, FileMode.Create))
                     {
                         await project.ImageFile.CopyToAsync(fileStream);
                     }
+                    project.ProjectImages.Add(new ProjectImage { ImageUrl = project.ImageUrl });
                 }
 
                 _context.Add(project);
@@ -79,24 +108,66 @@ namespace MyWebPage.Areas.Admin.Controllers
             if (id != project.Id) return NotFound();
             if (ModelState.IsValid)
             {
-                if (project.ImageFile != null)
+                var existingProject = await _context.Projects
+                    .Include(p => p.ProjectImages)
+                    .FirstOrDefaultAsync(p => p.Id == project.Id);
+                    
+                if (existingProject == null) return NotFound();
+
+                // Update properties
+                existingProject.Title = project.Title;
+                existingProject.Summary = project.Summary;
+                existingProject.Technologies = project.Technologies;
+                existingProject.LiveLink = project.LiveLink;
+
+                // Handle multiple image uploads
+                if (project.ImageFiles != null && project.ImageFiles.Count > 0)
                 {
                     string wwwRootPath = _hostEnvironment.WebRootPath;
-                    string fileName = Path.GetFileNameWithoutExtension(project.ImageFile.FileName);
+                    string uploadsFolder = Path.Combine(wwwRootPath, "uploads", "projects");
+                    Directory.CreateDirectory(uploadsFolder);
+                    
+                    foreach (var file in project.ImageFiles)
+                    {
+                        string extension = Path.GetExtension(file.FileName);
+                        string fileName = Guid.NewGuid().ToString() + extension;
+                        string path = Path.Combine(uploadsFolder, fileName);
+                        
+                        using (var fileStream = new FileStream(path, FileMode.Create))
+                        {
+                            await file.CopyToAsync(fileStream);
+                        }
+                        
+                        existingProject.ProjectImages.Add(new ProjectImage { ImageUrl = "/uploads/projects/" + fileName });
+                    }
+                    
+                    if (string.IsNullOrEmpty(existingProject.ImageUrl) && existingProject.ProjectImages.Count > 0)
+                    {
+                        existingProject.ImageUrl = existingProject.ProjectImages.First().ImageUrl;
+                    }
+                }
+                else if (project.ImageFile != null)
+                {
+                    string wwwRootPath = _hostEnvironment.WebRootPath;
                     string extension = Path.GetExtension(project.ImageFile.FileName);
-                    project.ImageUrl = "/uploads/projects/" + fileName + DateTime.Now.ToString("yymmssfff") + extension;
+                    string fileName = Guid.NewGuid().ToString() + extension;
                     
-                    string path = Path.Combine(wwwRootPath + "/uploads/projects/", fileName + DateTime.Now.ToString("yymmssfff") + extension);
+                    string newImageUrl = "/uploads/projects/" + fileName;
                     
-                    Directory.CreateDirectory(Path.Combine(wwwRootPath, "uploads", "projects"));
+                    string uploadsFolder = Path.Combine(wwwRootPath, "uploads", "projects");
+                    Directory.CreateDirectory(uploadsFolder);
+                    
+                    string path = Path.Combine(uploadsFolder, fileName);
                     
                     using (var fileStream = new FileStream(path, FileMode.Create))
                     {
                         await project.ImageFile.CopyToAsync(fileStream);
                     }
+                    existingProject.ImageUrl = newImageUrl;
+                    existingProject.ProjectImages.Add(new ProjectImage { ImageUrl = newImageUrl });
                 }
                 
-                _context.Update(project);
+                _context.Update(existingProject);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }

@@ -12,6 +12,7 @@ namespace MyWebPage.Data
         public DbSet<Project> Projects { get; set; }
         public DbSet<PersonalInfo> PersonalInfos { get; set; }
         public DbSet<Experience> Experiences { get; set; }
+        public DbSet<ProjectImage> ProjectImages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

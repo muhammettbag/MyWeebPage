@@ -22,9 +22,9 @@
         <span asp-validation-for="Technologies" class="text-danger"></span>
     </div>
     <div class="mb-3">
-        <label asp-for="ImageFile" class="form-label">Bilgisayardan Yeni Resim Yükle (Değiştirmek istersen)</label>
-        <input asp-for="ImageFile" type="file" class="form-control" accept="image/*" />
-        <small class="text-muted">Mevcut bir resim varsa o silinip bu yüklenecektir. Veya bilgisayardan yüklemek yerine aşağıya bir resim linki yapıştırabilirsiniz.</small>
+        <label asp-for="ImageFiles" class="form-label">Bilgisayardan Ek Resimler Yükle</label>
+        <input asp-for="ImageFiles" type="file" class="form-control" accept="image/*" multiple />
+        <small class="text-muted">Birden fazla fotoğraf seçebilirsiniz. Yeni yüklenenler mevcut fotoğrafların yanına eklenecektir.</small>
     </div>
     <div class="mb-3">
         <label asp-for="ImageUrl" class="form-label">Mevcut Resim URL (Dış Bağlantı)</label>
