@@ -96,7 +96,7 @@ namespace MyWebPage.Areas.Admin.Controllers
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
-            var project = await _context.Projects.FindAsync(id);
+            var project = await _context.Projects.Include(p => p.ProjectImages).FirstOrDefaultAsync(p => p.Id == id);
             if (project == null) return NotFound();
             return View(project);
         }
@@ -182,6 +182,41 @@ namespace MyWebPage.Areas.Admin.Controllers
             {
                 _context.Projects.Remove(project);
                 await _context.SaveChangesAsync();
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteImage(int imageId)
+        {
+            var image = await _context.ProjectImages.FindAsync(imageId);
+            if (image != null)
+            {
+                int projectId = image.ProjectId;
+                _context.ProjectImages.Remove(image);
+                await _context.SaveChangesAsync();
+                
+                // Geri kalan resimlerden birini ana resim yap
+                var project = await _context.Projects.Include(p => p.ProjectImages).FirstOrDefaultAsync(p => p.Id == projectId);
+                if (project != null && project.ImageUrl == image.ImageUrl)
+                {
+                    project.ImageUrl = project.ProjectImages.FirstOrDefault()?.ImageUrl ?? "";
+                    _context.Update(project);
+                    await _context.SaveChangesAsync();
+                }
+
+                // İsteğe bağlı olarak fiziksel dosyayı silebiliriz
+                if (image.ImageUrl.StartsWith("/uploads/projects/"))
+                {
+                    string wwwRootPath = _hostEnvironment.WebRootPath;
+                    string filePath = Path.Combine(wwwRootPath, image.ImageUrl.TrimStart('/'));
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        System.IO.File.Delete(filePath);
+                    }
+                }
+
+                return RedirectToAction(nameof(Edit), new { id = projectId });
             }
             return RedirectToAction(nameof(Index));
         }

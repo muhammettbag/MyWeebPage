@@ -14,50 +14,45 @@
         </div>
 
         <div class="row">
-            <div class="col-12 mb-5">
-                <!-- Carousel -->
-                <div id="projectCarousel" class="carousel slide carousel-fade shadow-lg rounded overflow-hidden" data-bs-ride="carousel">
-                    <div class="carousel-inner">
-                        @if (Model.ProjectImages != null && Model.ProjectImages.Any())
-                        {
-                            var isFirst = true;
-                            foreach (var img in Model.ProjectImages)
+            @if ((Model.ProjectImages != null && Model.ProjectImages.Any()) || !string.IsNullOrEmpty(Model.ImageUrl))
+            {
+                <div class="col-12 mb-5">
+                    <!-- Carousel -->
+                    <div id="projectCarousel" class="carousel slide carousel-fade shadow-lg rounded overflow-hidden" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            @if (Model.ProjectImages != null && Model.ProjectImages.Any())
                             {
-                                <div class="carousel-item @(isFirst ? "active" : "")">
-                                    <img src="@img.ImageUrl" class="d-block w-100 carousel-img" alt="@Model.Title">
-                                </div>
-                                isFirst = false;
+                                var isFirst = true;
+                                foreach (var img in Model.ProjectImages)
+                                {
+                                    <div class="carousel-item @(isFirst ? "active" : "")">
+                                        <img src="@img.ImageUrl" class="d-block w-100 carousel-img" alt="@Model.Title">
+                                    </div>
+                                    isFirst = false;
+                                }
                             }
-                        }
-                        else if (!string.IsNullOrEmpty(Model.ImageUrl))
-                        {
-                            <div class="carousel-item active">
-                                <img src="@Model.ImageUrl" class="d-block w-100 carousel-img" alt="@Model.Title">
-                            </div>
-                        }
-                        else
-                        {
-                            <div class="carousel-item active">
-                                <div class="d-flex justify-content-center align-items-center bg-secondary carousel-img">
-                                    <span class="text-white">Görsel Yok</span>
+                            else if (!string.IsNullOrEmpty(Model.ImageUrl))
+                            {
+                                <div class="carousel-item active">
+                                    <img src="@Model.ImageUrl" class="d-block w-100 carousel-img" alt="@Model.Title">
                                 </div>
-                            </div>
+                            }
+                        </div>
+                        
+                        @if ((Model.ProjectImages != null && Model.ProjectImages.Count > 1))
+                        {
+                            <button class="carousel-control-prev" type="button" data-bs-target="#projectCarousel" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Önceki</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#projectCarousel" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Sonraki</span>
+                            </button>
                         }
                     </div>
-                    
-                    @if ((Model.ProjectImages != null && Model.ProjectImages.Count > 1))
-                    {
-                        <button class="carousel-control-prev" type="button" data-bs-target="#projectCarousel" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Önceki</span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#projectCarousel" data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Sonraki</span>
-                        </button>
-                    }
                 </div>
-            </div>
+            }
             
             <div class="col-12 col-md-10 mx-auto text-center mb-5">
                 <h3 class="mb-4 text-accent"><i class="fas fa-align-left"></i> Proje Açıklaması</h3>

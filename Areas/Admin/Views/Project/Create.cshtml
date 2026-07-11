@@ -22,8 +22,9 @@
     </div>
     <div class="mb-3">
         <label asp-for="ImageFiles" class="form-label">Bilgisayardan Resim/Resimler Yükle</label>
-        <input asp-for="ImageFiles" type="file" class="form-control" accept="image/*" multiple />
+        <input asp-for="ImageFiles" type="file" class="form-control" accept="image/*" multiple id="fileInput" />
         <small class="text-muted">Birden fazla fotoğraf seçebilirsiniz (Ctrl veya Shift'e basılı tutarak). Veya aşağıya bir resim linki yapıştırabilirsiniz.</small>
+        <div id="previewContainer" class="d-flex flex-wrap gap-2 mt-3"></div>
     </div>
     <div class="mb-3">
         <label asp-for="ImageUrl" class="form-label">Resim URL (Dış Bağlantı)</label>
@@ -36,3 +37,33 @@
     <button type="submit" class="btn btn-success">Kaydet</button>
     <a asp-action="Index" class="btn btn-secondary">İptal</a>
 </form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        document.getElementById('fileInput').addEventListener('change', function (e) {
+            var container = document.getElementById('previewContainer');
+            container.innerHTML = '';
+            
+            for (var i = 0; i < this.files.length; i++) {
+                var file = this.files[i];
+                if (file.type.match('image.*')) {
+                    var reader = new FileReader();
+                    reader.onload = (function (theFile) {
+                        return function (e) {
+                            var img = document.createElement('img');
+                            img.src = e.target.result;
+                            img.style.height = '100px';
+                            img.style.width = '150px';
+                            img.style.borderRadius = '5px';
+                            img.style.objectFit = 'cover';
+                            img.style.border = '1px solid #ddd';
+                            container.appendChild(img);
+                        };
+                    })(file);
+                    reader.readAsDataURL(file);
+                }
+            }
+        });
+    </script>
+}

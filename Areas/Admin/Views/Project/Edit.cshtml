@@ -23,18 +23,41 @@
     </div>
     <div class="mb-3">
         <label asp-for="ImageFiles" class="form-label">Bilgisayardan Ek Resimler Yükle</label>
-        <input asp-for="ImageFiles" type="file" class="form-control" accept="image/*" multiple />
+        <input asp-for="ImageFiles" type="file" class="form-control" accept="image/*" multiple id="fileInput" />
         <small class="text-muted">Birden fazla fotoğraf seçebilirsiniz. Yeni yüklenenler mevcut fotoğrafların yanına eklenecektir.</small>
+        <div id="previewContainer" class="d-flex flex-wrap gap-2 mt-3"></div>
     </div>
+    <div class="mb-4 p-3 border rounded">
+        <label class="form-label d-block fw-bold mb-3">Mevcut Proje Fotoğrafları</label>
+        <div class="d-flex flex-wrap gap-3">
+            @if (Model.ProjectImages != null && Model.ProjectImages.Any())
+            {
+                foreach (var img in Model.ProjectImages)
+                {
+                    <div class="position-relative" style="display:inline-block;">
+                        <img src="@img.ImageUrl" style="height: 120px; width: 180px; border-radius: 8px; border: 1px solid #ccc; object-fit: cover;" />
+                        <button type="submit" asp-action="DeleteImage" asp-route-imageId="@img.Id" formnovalidate class="btn btn-danger btn-sm position-absolute" style="top:-10px; right:-10px; border-radius: 50%;" onclick="return confirm('Bu resmi silmek istediğinize emin misiniz?');">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                }
+            }
+            else if (!string.IsNullOrEmpty(Model.ImageUrl))
+            {
+                <div class="position-relative" style="display:inline-block;">
+                    <img src="@Model.ImageUrl" style="height: 120px; width: 180px; border-radius: 8px; border: 1px solid #ccc; object-fit: cover;" />
+                </div>
+            }
+            else
+            {
+                <span class="text-muted">Projeye ait fotoğraf bulunmuyor.</span>
+            }
+        </div>
+    </div>
+    
     <div class="mb-3">
         <label asp-for="ImageUrl" class="form-label">Mevcut Resim URL (Dış Bağlantı)</label>
         <input asp-for="ImageUrl" class="form-control" placeholder="https://..." />
-        @if (!string.IsNullOrEmpty(Model.ImageUrl))
-        {
-            <div class="mt-2">
-                <img src="@Model.ImageUrl" style="max-height: 100px; border-radius: 8px;" />
-            </div>
-        }
     </div>
     <div class="mb-3">
         <label asp-for="LiveLink" class="form-label">Canlı Link</label>
@@ -43,3 +66,33 @@
     <button type="submit" class="btn btn-warning">Güncelle</button>
     <a asp-action="Index" class="btn btn-secondary">İptal</a>
 </form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        document.getElementById('fileInput').addEventListener('change', function (e) {
+            var container = document.getElementById('previewContainer');
+            container.innerHTML = '';
+            
+            for (var i = 0; i < this.files.length; i++) {
+                var file = this.files[i];
+                if (file.type.match('image.*')) {
+                    var reader = new FileReader();
+                    reader.onload = (function (theFile) {
+                        return function (e) {
+                            var img = document.createElement('img');
+                            img.src = e.target.result;
+                            img.style.height = '100px';
+                            img.style.width = '150px';
+                            img.style.borderRadius = '5px';
+                            img.style.objectFit = 'cover';
+                            img.style.border = '1px solid #ddd';
+                            container.appendChild(img);
+                        };
+                    })(file);
+                    reader.readAsDataURL(file);
+                }
+            }
+        });
+    </script>
+}

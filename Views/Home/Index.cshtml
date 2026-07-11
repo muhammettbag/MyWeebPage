@@ -126,7 +126,7 @@
             @foreach (var p in Model.Projects)
             {
                 <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
-                    <div class="project-card h-100" style="cursor: pointer;" onclick="window.location.href='@Url.Action("ProjectDetails", "Home", new { id = p.Id })'">
+                    <div class="project-card h-100">
                         @if (!string.IsNullOrEmpty(p.ImageUrl))
                         {
                             <div class="project-img-wrapper">
@@ -142,9 +142,7 @@
                                     <span class="tech-tag">@tech.Trim()</span>
                                 }
                             </div>
-                            <div class="mt-auto">
-                                <span class="text-accent fs-6"><i class="fas fa-search-plus"></i> Detayları İncele</span>
-                            </div>
+                            <!-- Proje kartında artık detay sayfası linki yok -->
                         </div>
                     </div>
                 </div>
